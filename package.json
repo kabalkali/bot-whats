@@ -1,0 +1,21 @@
+{
+  "name": "crm-bot-vercel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.x.x",
+    "react": "18.x.x",
+    "react-dom": "18.x.x",
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode": "^1.5.3",
+    "@vercel/kv": "^1.0.1",
+    "mime-types": "^2.1.35",
+    "moment-timezone": "^0.5.45"
+  }
+}
