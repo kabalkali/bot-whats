@@ -9,7 +9,7 @@ export default function Home() {
 
     const fetchBotStatus = async () => {
       try {
-        // Chama a função API no Vercel (pages/api/bot.js)
+        // Chama a função API no Vercel (/api/bot)
         const res = await fetch('/api/bot');
         const data = await res.json();
 
@@ -21,7 +21,7 @@ export default function Home() {
           setQrImageUrl(null);
         }
 
-        // Se não estiver pronto, continua tentando (polling)
+        // Se não estiver pronto, continua tentando (polling a cada 5 segundos)
         if (data.status !== 'ready') {
           intervalId = setTimeout(fetchBotStatus, 5000); 
         }
@@ -49,7 +49,6 @@ export default function Home() {
         <div style={{ marginTop: '30px' }}>
           <p>
             🚨 **Escaneie o QR Code abaixo imediatamente** usando o seu celular (Configurações &gt; Aparelhos Conectados &gt; Conectar um aparelho):
-            {/* A sintaxe foi corrigida aqui: ">" foi trocado por "&gt;" */}
           </p>
           <img 
             src={qrImageUrl} 
