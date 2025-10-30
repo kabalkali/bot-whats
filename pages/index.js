@@ -9,7 +9,7 @@ export default function Home() {
 
     const fetchBotStatus = async () => {
       try {
-        // Chama a função API no Vercel (/api/bot)
+        // Chama a função API no Vercel a cada 5 segundos (polling)
         const res = await fetch('/api/bot');
         const data = await res.json();
 
@@ -21,7 +21,7 @@ export default function Home() {
           setQrImageUrl(null);
         }
 
-        // Se não estiver pronto, continua tentando (polling a cada 5 segundos)
+        // Continua o polling se nao estiver pronto
         if (data.status !== 'ready') {
           intervalId = setTimeout(fetchBotStatus, 5000); 
         }
@@ -56,7 +56,7 @@ export default function Home() {
             style={{ width: '250px', height: '250px', border: '5px solid #25D366', padding: '10px' }} 
           />
           <p>
-            *Lembre-se: O ambiente do Vercel é Serverless. Mantenha a aba aberta no começo. Se o bot desconectar, atualize a página para gerar um novo QR Code.
+            *Dica: Escaneie rapidamente. O tempo de vida do QR Code no Vercel é curto.*
           </p>
         </div>
       )}
@@ -75,7 +75,7 @@ export default function Home() {
       
       {botStatus === 'error' && (
         <p style={{ color: 'red' }}>
-          ❌ Ocorreu um erro ao conectar o bot. Verifique os logs do Vercel.
+          ❌ Ocorreu um erro ao conectar o bot.
         </p>
       )}
     </div>

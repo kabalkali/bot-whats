@@ -1,10 +1,10 @@
 import { Client, LocalAuth } from 'whatsapp-web.js';
 import qrcode from 'qrcode';
-// Importacoes necessarias para o Puppeteer rodar no Vercel (ambiente Serverless/Lambda)
+// Pacotes para rodar o navegador no ambiente Serverless
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core'; 
 
-// Variaveis de estado global (CUIDADO: podem ser resetadas quando o Vercel "esfria")
+// Variaveis de estado global
 let client = null;
 let qrCodeData = null; 
 let clientStatus = 'initializing';
@@ -12,14 +12,10 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 // --- Funcao para inicializar o cliente WhatsApp ---
 const initializeClient = async () => {
-    // Evita inicializar o cliente varias vezes se ele ja estiver em um estado valido
     if (client && (clientStatus === 'ready' || clientStatus === 'qr_code')) return;
 
     // --- Configuracao do Puppeteer para Vercel ---
-    // 1. Pede ao pacote para determinar o caminho correto do executavel
     const executablePath = await chromium.executablePath(); 
-    
-    // 2. Configuracoes do Puppeteer
     const puppeteerConfig = {
         executablePath: executablePath, 
         headless: chromium.headless,
@@ -27,7 +23,7 @@ const initializeClient = async () => {
             ...chromium.args,
             '--hide-scrollbars',
             '--disable-web-security',
-            '--no-sandbox', // Essencial para ambientes Linux/Serverless
+            '--no-sandbox',
         ],
     };
     // ---------------------------------------------
@@ -38,7 +34,6 @@ const initializeClient = async () => {
             clientId: "vercel-bot-session",
             dataPath: '/tmp/wwebjs_auth' 
         }),
-        // Aplica a configuracao do Puppeteer
         puppeteer: puppeteerConfig
     });
 
@@ -120,7 +115,7 @@ const initializeClient = async () => {
             await delay(3000);
             await chat.sendStateTyping();
             await delay(3000);
-            await client.sendMessage(msg.from, 'Sorteio de em prêmios todo ano.\n\nAtendimento médico ilimitado 24h por dia.\n\nReceitas de medicamentos');
+            await client.sendMessage(msg.from, 'Sorteio de em premios todo ano.\n\nAtendimento medico ilimitado 24h por dia.\n\nReceitas de medicamentos');
             await delay(3000);
             await chat.sendStateTyping();
             await delay(3000);
@@ -133,7 +128,7 @@ const initializeClient = async () => {
             await delay(3000);
             await chat.sendStateTyping();
             await delay(3000);
-            await client.sendMessage(msg.from, 'Você pode aderir aos nossos planos diretamente pelo nosso site ou pelo WhatsApp.\n\nApós a adesão, você terá acesso imediato');
+            await client.sendMessage(msg.from, 'Voce pode aderir aos nossos planos diretamente pelo nosso site ou pelo WhatsApp.\n\nApós a adesão, você terá acesso imediato');
             await delay(3000);
             await chat.sendStateTyping();
             await delay(3000);
@@ -146,7 +141,7 @@ const initializeClient = async () => {
             await delay(3000);
             await chat.sendStateTyping();
             await delay(3000);
-            await client.sendMessage(msg.from, 'Se você tiver outras dúvidas ou precisar de mais informações, por favor, fale aqui nesse whatsapp ou visite nosso site: https://site.com ');
+            await client.sendMessage(msg.from, 'Se voce tiver outras duvidas ou precisar de mais informacoes, por favor, fale aqui nesse whatsapp ou visite nosso site: https://site.com ');
         }
     });
     // --- Fim da Logica do Funil ---
@@ -164,7 +159,6 @@ const initializeClient = async () => {
 export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
 
-    // Inicializa ou garante que a inicializacao esta em curso
     await initializeClient(); 
 
     if (clientStatus === 'qr_code' && qrCodeData) {
